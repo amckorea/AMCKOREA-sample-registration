@@ -451,6 +451,13 @@
     display:flex;
     flex-direction:column;
     gap:12px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .25s ease;
+  }
+  .float-contact.visible{
+    opacity:1;
+    pointer-events:auto;
   }
   .float-btn{
     width:52px;height:52px;
@@ -682,6 +689,17 @@
   </div>
 </footer>
 
+<div class="float-contact">
+  <a href="http://pf.kakao.com/_LPhVn/chat" target="_blank" rel="noopener" class="float-btn kakao" aria-label="카카오톡 문의">
+    <svg viewBox="0 0 24 24" width="24" height="24"><path fill="#391B1B" d="M12 3C6.48 3 2 6.48 2 10.8c0 2.76 1.84 5.18 4.6 6.6-.2.74-.73 2.7-.84 3.13-.13.53.2.52.42.38.17-.11 2.67-1.81 3.76-2.55.66.1 1.35.15 2.06.15 5.52 0 10-3.48 10-7.8C22 6.48 17.52 3 12 3Z"/></svg>
+  </a>
+  <a href="tel:010-2899-7299" class="float-btn call" aria-label="전화 문의">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5c0-1 1-2 2-2h2.5l2 5-2 1.5a12 12 0 0 0 6 6l1.5-2 5 2v2.5c0 1-1 2-2 2C9.5 21 3 14.5 3 5Z"/></svg>
+  </a>
+</div>
+
+<iframe name="hidden_iframe" style="display:none;"></iframe>
+
 <script>
   // 스크롤에 따라 등장/퇴장 반복 (위/아래 모두)
   const fadeEls = document.querySelectorAll('.scroll-fade');
@@ -701,6 +719,15 @@
   }
   window.addEventListener('scroll', updateParallax, { passive: true });
   updateParallax();
+
+  // 떠다니는 카카오톡/전화 버튼: 헤로(신청 폼 영역)를 지나야 나타남
+  const floatContact = document.querySelector('.float-contact');
+  const floatObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      floatContact.classList.toggle('visible', !entry.isIntersecting);
+    });
+  }, { threshold: 0 });
+  floatObserver.observe(heroSection);
 
   // 다음 우편번호 검색
   document.getElementById('addrSearchBtn').addEventListener('click', function(){
@@ -818,17 +845,6 @@
     form.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 </script>
-
-<div class="float-contact">
-  <a href="http://pf.kakao.com/_LPhVn/chat" target="_blank" rel="noopener" class="float-btn kakao" aria-label="카카오톡 문의">
-    <svg viewBox="0 0 24 24" width="24" height="24"><path fill="#391B1B" d="M12 3C6.48 3 2 6.48 2 10.8c0 2.76 1.84 5.18 4.6 6.6-.2.74-.73 2.7-.84 3.13-.13.53.2.52.42.38.17-.11 2.67-1.81 3.76-2.55.66.1 1.35.15 2.06.15 5.52 0 10-3.48 10-7.8C22 6.48 17.52 3 12 3Z"/></svg>
-  </a>
-  <a href="tel:010-2899-7299" class="float-btn call" aria-label="전화 문의">
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5c0-1 1-2 2-2h2.5l2 5-2 1.5a12 12 0 0 0 6 6l1.5-2 5 2v2.5c0 1-1 2-2 2C9.5 21 3 14.5 3 5Z"/></svg>
-  </a>
-</div>
-
-<iframe name="hidden_iframe" style="display:none;"></iframe>
 
 </body>
 </html>
