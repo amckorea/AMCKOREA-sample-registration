@@ -469,6 +469,44 @@
   .float-btn:hover{transform:translateY(-2px);}
   .float-btn.kakao{background:#FEE500;}
   .float-btn.call{background:#34C759;}
+  .terms-overlay{
+    display:none;
+    position:fixed; inset:0;
+    background:rgba(10,20,35,0.55);
+    z-index:100;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+  }
+  .terms-overlay.show{display:flex;}
+  .terms-modal{
+    background:#ffffff;
+    max-width:520px;
+    width:100%;
+    max-height:80vh;
+    border-radius:8px;
+    overflow:hidden;
+    display:flex;
+    flex-direction:column;
+  }
+  .terms-modal-header{
+    display:flex;align-items:center;justify-content:space-between;
+    padding:18px 22px;
+    border-bottom:1px solid var(--line);
+  }
+  .terms-modal-header h3{font-size:1.05rem;color:var(--ink);font-weight:700;}
+  .terms-modal-header button{
+    background:none;border:none;font-size:1.1rem;color:var(--muted);cursor:pointer;
+  }
+  .terms-modal-body{
+    padding:22px;
+    overflow-y:auto;
+    font-size:0.85rem;
+    color:var(--muted);
+    line-height:1.7;
+  }
+  .terms-modal-body p{margin-bottom:16px;}
+  .terms-modal-body strong{color:var(--ink);}
 </style>
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 </head>
@@ -559,10 +597,26 @@
           <p class="form-notice">※ 샘플은 공용 사이즈로 발송됩니다. 상세 스펙에 대한 견적은 확인 후 별도로 회신드립니다.</p>
           <div class="agree">
             <input type="checkbox" id="agreeBox" required>
-            <label for="agreeBox">개인정보 수집·이용에 동의합니다. (샘플 발송 목적으로만 사용, 발송 후 즉시 파기) <a href="#">전체 약관 보기</a></label>
+            <label for="agreeBox">개인정보 수집·이용에 동의합니다. (샘플 발송 목적으로만 사용, 발송 후 즉시 파기) <a href="#" id="termsLink">전체 약관 보기</a></label>
           </div>
           <button type="submit" class="submit-btn">샘플 신청 제출하기</button>
         </form>
+
+        <div class="terms-overlay" id="termsOverlay">
+          <div class="terms-modal">
+            <div class="terms-modal-header">
+              <h3>개인정보 수집·이용 동의</h3>
+              <button type="button" id="termsCloseBtn" aria-label="닫기">✕</button>
+            </div>
+            <div class="terms-modal-body">
+              <p><strong>1. 수집 항목</strong><br>담당자 성함, 연락처, 이메일, 샘플 받으실 주소, 회사명(선택), 예상 발주 수량, 상세 요청 내용</p>
+              <p><strong>2. 수집 및 이용 목적</strong><br>무료 샘플 발송 및 발송 관련 안내, 후속 견적·상담 연락</p>
+              <p><strong>3. 보유 및 이용 기간</strong><br>샘플 발송 완료 및 목적 달성 후 즉시 파기합니다. 단, 추가 상담 또는 거래가 이어지는 경우 별도 동의 하에 보관될 수 있습니다.</p>
+              <p><strong>4. 동의 거부 권리 및 불이익</strong><br>위 개인정보 수집·이용에 동의하지 않으실 수 있으며, 이 경우 샘플 신청 및 발송이 제한됩니다.</p>
+              <p><strong>5. 문의</strong><br>에이엠씨코리아 · 전화 010-2899-7299 · 이메일 kts3188@naver.com</p>
+            </div>
+          </div>
+        </div>
 
         <div class="success" id="successBox">
           <div class="mark">✓</div>
@@ -843,6 +897,19 @@
     document.getElementById('successBox').classList.remove('show');
     form.style.display = 'block';
     form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // 전체 약관 보기 모달
+  const termsOverlay = document.getElementById('termsOverlay');
+  document.getElementById('termsLink').addEventListener('click', function(e){
+    e.preventDefault();
+    termsOverlay.classList.add('show');
+  });
+  document.getElementById('termsCloseBtn').addEventListener('click', function(){
+    termsOverlay.classList.remove('show');
+  });
+  termsOverlay.addEventListener('click', function(e){
+    if(e.target === termsOverlay) termsOverlay.classList.remove('show');
   });
 </script>
 
